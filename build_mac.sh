@@ -14,9 +14,10 @@ fi
 
 version=$(cat VERSION.txt)
 
-# a release tag must match VERSION.txt
+# a release tag must match VERSION.txt (uncommitted changes aren't the
+# tagged release, so only check a clean tree)
 tag=$(git tag --points-at HEAD 'v*' | head -1)
-if [ -n "$tag" ] && [ "$tag" != "v$version" ]; then
+if [ -n "$tag" ] && git diff --quiet HEAD && [ "$tag" != "v$version" ]; then
   echo "HEAD is tagged $tag but VERSION.txt says $version" >&2
   exit 1
 fi

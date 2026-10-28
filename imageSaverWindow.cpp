@@ -80,6 +80,7 @@ void imageSaverWindow::doPdfSave(const QString& outputFile,
 
   QPrinter printer;
   printer.setOutputFormat(QPrinter::PdfFormat);  // actually default
+  printer.setResolution(96); // match Windows/Linux (macOS defaults to 72)
   printer.setOutputFileName(outputFile);
   const int xMargins = printer.paperRect(QPrinter::DevicePixel).width() -
     printer.pageRect(QPrinter::DevicePixel).width();

@@ -66,6 +66,9 @@ bool patternPrinter::beginPainter(const QString& outputFileName) {
 void patternPrinter::save() {
 
   printer_.setOutputFormat(QPrinter::PdfFormat);  // actually default
+  // the layout is in device pixels, sized for the 96 dpi Qt uses on
+  // Windows/Linux (macOS defaults to 72, which blows everything up)
+  printer_.setResolution(96);
   //qreal l,r,t,b;
   //printer_.getPageMargins(&l, &t, &r, &b, QPrinter::Point);
   printer_.setPageMargins(QMarginsF(.35, .35, .35, .35), QPageLayout::Inch);
@@ -506,7 +509,7 @@ void patternPrinter::drawColorList(int startHeight) {
   ::setFontHeight(&painter_, symbolDim);
   const QFont listFont = painter_.font();
 
-  const QFontMetrics listFontMetric(listFont);
+  const QFontMetrics listFontMetric(listFont, &printer_);
   const int fontHeight = listFontMetric.height();
 
   //// list color count and box dimensions
@@ -531,7 +534,7 @@ void patternPrinter::drawColorList(int startHeight) {
   QFont boldFont = listFont;
   boldFont.setBold(true);
   painter_.setFont(boldFont);
-  const QFontMetrics boldFontMetric(boldFont);
+  const QFontMetrics boldFontMetric(boldFont, &printer_);
 
   //// tab stops
   const int padding = 10;

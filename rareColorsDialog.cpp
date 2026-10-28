@@ -77,7 +77,7 @@ rareColorsDialog::rareColorsDialog(const QHash<QRgb, int>& colorCounts)
   //property or sub-control is customized, all the other properties or
   //sub-controls must be customized as well.
 //  scroll_->setStyleSheet("QWidget { background-color: white; }");
-  scroll_->viewport()->setStyleSheet("background-color: white;");
+  scroll_->viewport()->setStyleSheet("background-color: palette(base);");
   // make the scroll as wide as the widest possible row
   const QString testString(::itoqs(rangeMax) +
                            " squares (255, 255, 255) --> (255, 255, 255)");
