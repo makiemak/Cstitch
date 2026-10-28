@@ -68,8 +68,8 @@ void patternPrinter::save() {
   printer_.setOutputFormat(QPrinter::PdfFormat);  // actually default
   //qreal l,r,t,b;
   //printer_.getPageMargins(&l, &t, &r, &b, QPrinter::Point);
-  printer_.setPageMargins(.35, .35, .35, .35, QPrinter::Inch);
-  const QRect printerRect = printer_.pageRect();
+  printer_.setPageMargins(QMarginsF(.35, .35, .35, .35), QPageLayout::Inch);
+  const QRect printerRect = printer_.pageRect(QPrinter::DevicePixel).toRect();
   printerWidth_ = printerRect.width();
   printerHeight_ = printerRect.height();
   patternMetadata metadata(printerWidth_, 20, 8, 8, NULL);
@@ -224,7 +224,7 @@ QString patternPrinter::getExternalPdfViewer() {
 
 void patternPrinter::drawTitlePage(const patternMetadata& metadata) {
 
-  QRect availableTextRect = printer_.pageRect();
+  QRect availableTextRect = printer_.pageRect(QPrinter::DevicePixel).toRect();
   // the availableTextRect is absolute with respect to the page, but
   // when we draw it's relative to availableTextRect - use draw coords
   availableTextRect.moveTopLeft(QPoint(0, 0));
@@ -259,7 +259,7 @@ void patternPrinter::drawTitlePage(const patternMetadata& metadata) {
   printer_.newPage();
 
   //// draw the squared image
-  QRect usableRect = printer_.pageRect();
+  QRect usableRect = printer_.pageRect(QPrinter::DevicePixel).toRect();
   usableRect.moveTopLeft(QPoint(0, 0));
   // figure out if gridding will be reasonable at the zoom level needed
   // to fit the page
@@ -537,9 +537,9 @@ void patternPrinter::drawColorList(int startHeight) {
   const int padding = 10;
   const int swatchTab = symbolDim + 5;
   const int countTab = 2 * swatchTab + padding;
-  const int codeTab = countTab + listFontMetric.width("99999999") + padding;
-  const int nameTab = codeTab + listFontMetric.width("255 255 255") + padding;
-  const int endTab = nameTab + boldFontMetric.width("~8888:Ultra V DK Turquoise");
+  const int codeTab = countTab + listFontMetric.horizontalAdvance("99999999") + padding;
+  const int nameTab = codeTab + listFontMetric.horizontalAdvance("255 255 255") + padding;
+  const int endTab = nameTab + boldFontMetric.horizontalAdvance("~8888:Ultra V DK Turquoise");
 
   yused += fontHeight;
   drawListHeader(0, yused, countTab, codeTab, nameTab);
